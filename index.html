@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harish P Rao — SRE &amp; DevOps Engineer</title>
+<meta name="description" content="Harish P Rao — SRE & DevOps Engineer. CI/CD, Kubernetes, Terraform, AWS.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0F1B2D;
+    --bg-deep: #0A1420;
+    --panel: #142338;
+    --panel-2: #182A44;
+    --line: rgba(160, 190, 224, 0.14);
+    --line-strong: rgba(160, 190, 224, 0.28);
+    --text: #E9EFF7;
+    --text-muted: #8FA3C0;
+    --text-dim: #64789A;
+    --cyan: #5EEAD4;
+    --amber: #FFB454;
+    --amber-dim: rgba(255,180,84,0.15);
+    --cyan-dim: rgba(94,234,212,0.12);
+    --radius: 3px;
+    --mono: 'IBM Plex Mono', ui-monospace, monospace;
+    --sans: 'IBM Plex Sans', system-ui, sans-serif;
+  }
+
+  *{ box-sizing: border-box; margin:0; padding:0; }
+
+  html{ scroll-behavior: smooth; }
+
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.6;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 48px 48px;
+    background-position: -1px -1px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    *{ animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+
+  a{ color: inherit; }
+
+  ::selection{ background: var(--cyan); color: var(--bg-deep); }
+
+  :focus-visible{
+    outline: 2px solid var(--cyan);
+    outline-offset: 3px;
+  }
+
+  .wrap{
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  /* ---------- NAV ---------- */
+  header.topnav{
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(10, 20, 32, 0.86);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .topnav-inner{
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 16px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand{
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    color: var(--cyan);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+  }
+  .brand .dot{
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 8px var(--cyan);
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{ opacity: 1; }
+    50%{ opacity: 0.35; }
+  }
+  nav.links{
+    display: flex;
+    gap: 28px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    letter-spacing: 0.04em;
+  }
+  nav.links a{
+    text-decoration: none;
+    color: var(--text-muted);
+    padding: 6px 2px;
+    border-bottom: 1px solid transparent;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  nav.links a:hover, nav.links a:focus-visible{
+    color: var(--cyan);
+    border-color: var(--cyan);
+  }
+  .nav-toggle{
+    display: none;
+    background: none;
+    border: 1px solid var(--line-strong);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 7px 10px;
+    border-radius: var(--radius);
+    cursor: pointer;
+  }
+
+  @media (max-width: 720px){
+    nav.links{
+      position: absolute;
+      top: 100%; left: 0; right: 0;
+      flex-direction: column;
+      background: var(--bg-deep);
+      border-bottom: 1px solid var(--line);
+      padding: 16px 28px;
+      gap: 16px;
+      display: none;
+    }
+    nav.links.open{ display: flex; }
+    .nav-toggle{ display: block; }
+  }
+
+  /* ---------- ANNOTATION LABELS ---------- */
+  .eyebrow{
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--amber);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .eyebrow::before{
+    content: "";
+    width: 22px; height: 1px;
+    background: var(--amber);
+    display: inline-block;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding: 96px 0 72px;
+    position: relative;
+  }
+  .hero-grid{
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+  @media (max-width: 860px){
+    .hero-grid{ grid-template-columns: 1fr; }
+  }
+
+  h1.name{
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: clamp(34px, 5.4vw, 58px);
+    line-height: 1.06;
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+  .role{
+    margin-top: 14px;
+    font-size: clamp(16px, 2vw, 20px);
+    color: var(--cyan);
+    font-family: var(--mono);
+    font-weight: 500;
+  }
+  .tagline{
+    margin-top: 22px;
+    max-width: 52ch;
+    color: var(--text-muted);
+    font-size: 16px;
+  }
+  .hero-meta{
+    margin-top: 26px;
+    display: flex;
+    gap: 22px;
+    flex-wrap: wrap;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--text-dim);
+  }
+  .hero-meta span{ display: flex; align-items: center; gap: 7px; }
+
+  .hero-actions{
+    margin-top: 32px;
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .btn{
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.03em;
+    padding: 12px 20px;
+    border-radius: var(--radius);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--line-strong);
+    transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+  }
+  .btn-primary{
+    background: var(--cyan);
+    color: var(--bg-deep);
+    border-color: var(--cyan);
+    font-weight: 600;
+  }
+  .btn-primary:hover{ transform: translateY(-1px); }
+  .btn-ghost{ color: var(--text); }
+  .btn-ghost:hover{ border-color: var(--cyan); color: var(--cyan); transform: translateY(-1px); }
+
+  /* status panel */
+  .status-panel{
+    border: 1px solid var(--line-strong);
+    background: var(--panel);
+    border-radius: var(--radius);
+    padding: 22px;
+    position: relative;
+  }
+  .status-panel::before{
+    content: "";
+    position: absolute;
+    top: -1px; left: 16px; right: 16px;
+    height: 1px;
+  }
+  .status-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px dashed var(--line);
+  }
+  .status-badge{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--cyan);
+  }
+  .status-badge .dot{
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 6px var(--cyan);
+  }
+  .uptime-label{
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .uptime-value{
+    font-family: var(--mono);
+    font-size: 26px;
+    color: var(--text);
+    margin-top: 6px;
+    font-weight: 600;
+  }
+  .uptime-value span{ color: var(--cyan); }
+  .metric-grid{
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .metric{
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    background: var(--bg-deep);
+  }
+  .metric .num{
+    font-family: var(--mono);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--amber);
+  }
+  .metric .label{
+    margin-top: 4px;
+    font-size: 11px;
+    color: var(--text-dim);
+    font-family: var(--mono);
+    letter-spacing: 0.02em;
+  }
+
+  /* ---------- SECTION SHELL ---------- */
+  section{ padding: 72px 0; border-top: 1px solid var(--line); }
+  .section-head{
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 20px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+  h2.section-title{
+    font-family: var(--mono);
+    font-size: clamp(22px, 3vw, 30px);
+    font-weight: 600;
+  }
+  .section-index{
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+
+  /* ---------- SUMMARY ---------- */
+  .summary-text{
+    max-width: 72ch;
+    color: var(--text-muted);
+    font-size: 16.5px;
+  }
+  .summary-text strong{ color: var(--text); font-weight: 600; }
+
+  /* ---------- PIPELINE (EXPERIENCE) ---------- */
+  .job-meta{
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-bottom: 36px;
+  }
+  .job-meta .client{ color: var(--cyan); }
+
+  .pipeline{
+    position: relative;
+    padding-left: 26px;
+  }
+  .pipeline::before{
+    content: "";
+    position: absolute;
+    left: 5px; top: 6px; bottom: 6px;
+    width: 1px;
+    background: linear-gradient(var(--cyan), var(--line-strong) 90%);
+  }
+  .stage{
+    position: relative;
+    padding-bottom: 34px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .stage.in-view{ opacity: 1; transform: translateY(0); }
+  .stage:last-child{ padding-bottom: 0; }
+  .stage::before{
+    content: "";
+    position: absolute;
+    left: -26px; top: 4px;
+    width: 11px; height: 11px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--cyan);
+  }
+  .stage-tag{
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--amber);
+    text-transform: uppercase;
+  }
+  .stage-title{
+    font-family: var(--mono);
+    font-size: 17px;
+    font-weight: 600;
+    margin-top: 4px;
+    color: var(--text);
+  }
+  .stage-desc{
+    margin-top: 8px;
+    color: var(--text-muted);
+    font-size: 15px;
+    max-width: 68ch;
+  }
+
+  /* ---------- STACK (SKILLS) ---------- */
+  .stack-grid{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  @media (max-width: 860px){ .stack-grid{ grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px){ .stack-grid{ grid-template-columns: 1fr; } }
+
+  .layer{
+    border: 1px solid var(--line);
+    background: var(--panel);
+    border-radius: var(--radius);
+    padding: 16px 16px 14px;
+  }
+  .layer-title{
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    padding-bottom: 10px;
+    margin-bottom: 12px;
+    border-bottom: 1px dashed var(--line);
+  }
+  .chip-row{ display: flex; flex-wrap: wrap; gap: 7px; }
+  .chip{
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-muted);
+    background: var(--bg-deep);
+    border: 1px solid var(--line);
+    padding: 5px 9px;
+    border-radius: var(--radius);
+  }
+
+  /* ---------- ACHIEVEMENTS ---------- */
+  .badge-list{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  @media (max-width: 700px){ .badge-list{ grid-template-columns: 1fr; } }
+  .badge{
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    border: 1px solid var(--line);
+    background: var(--panel);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+  }
+  .badge .mark{
+    font-family: var(--mono);
+    color: var(--cyan);
+    font-size: 15px;
+    line-height: 1.5;
+    flex-shrink: 0;
+  }
+  .badge p{ font-size: 14.5px; color: var(--text-muted); }
+  .badge p strong{ color: var(--text); font-weight: 600; }
+
+  /* ---------- EDU / CERTS ---------- */
+  .split-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+  @media (max-width: 780px){ .split-grid{ grid-template-columns: 1fr; gap: 44px; } }
+  .subhead{
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 16px;
+  }
+  .edu-card{
+    border-left: 2px solid var(--amber);
+    padding-left: 16px;
+  }
+  .edu-card .school{ font-weight: 600; color: var(--text); font-size: 15.5px; }
+  .edu-card .degree{ color: var(--text-muted); margin-top: 4px; font-size: 14.5px; }
+  .edu-card .meta{ font-family: var(--mono); font-size: 12.5px; color: var(--text-dim); margin-top: 8px; }
+
+  .cert-list{ list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .cert-list li{
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    font-size: 14.5px;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 12px;
+  }
+  .cert-list li:last-child{ border-bottom: none; }
+  .cert-list .idx{ font-family: var(--mono); color: var(--cyan); font-size: 12.5px; flex-shrink: 0; }
+  .cert-list strong{ color: var(--text); font-weight: 600; }
+
+  .lang-row{
+    margin-top: 30px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  /* ---------- CONTACT / FOOTER ---------- */
+  footer{
+    border-top: 1px solid var(--line);
+    padding: 64px 0 40px;
+  }
+  .terminal{
+    background: var(--bg-deep);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    padding: 24px 26px;
+    font-family: var(--mono);
+    font-size: 13.5px;
+    max-width: 640px;
+  }
+  .terminal .line{ margin-bottom: 10px; color: var(--text-muted); }
+  .terminal .line:last-child{ margin-bottom: 0; }
+  .terminal .prompt{ color: var(--cyan); }
+  .terminal a{ color: var(--amber); text-decoration: none; border-bottom: 1px dotted var(--amber); }
+  .terminal a:hover{ color: var(--text); border-color: var(--text); }
+  .cursor{
+    display: inline-block;
+    width: 8px; height: 14px;
+    background: var(--cyan);
+    margin-left: 4px;
+    animation: blink 1s step-end infinite;
+    vertical-align: text-bottom;
+  }
+  @keyframes blink{ 50%{ opacity: 0; } }
+
+  .footer-note{
+    margin-top: 28px;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--text-dim);
+  }
+</style>
+</head>
+<body>
+
+<header class="topnav">
+  <div class="topnav-inner">
+    <a href="#top" class="brand"><span class="dot"></span>HARISH.P.RAO</a>
+    <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks">MENU</button>
+    <nav class="links" id="navLinks">
+      <a href="#summary">Summary</a>
+      <a href="#pipeline">Pipeline</a>
+      <a href="#stack">Stack</a>
+      <a href="#achievements">Achievements</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero" style="padding-top:64px; border-top:none;">
+    <div class="wrap">
+      <div class="eyebrow">SYSTEM ID // HARISH.P.RAO</div>
+      <div class="hero-grid">
+        <div>
+          <h1 class="name">Harish P Rao</h1>
+          <div class="role">SRE &amp; DevOps Engineer</div>
+          <p class="tagline">Keeping production infrastructure online, automated, and cost-efficient — from Jenkins pipelines to Kubernetes clusters, one deployment at a time.</p>
+          <div class="hero-meta">
+            <span>📍 Mangaluru, Karnataka, India</span>
+            <span>✉ raoharish199@gmail.com</span>
+            <span>☎ +91 8971334633</span>
+          </div>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#contact">Get in touch</a>
+            <a class="btn btn-ghost" href="https://linkedin.com/in/harishrao-1512/" target="_blank" rel="noopener">View LinkedIn ↗</a>
+          </div>
+        </div>
+
+        <div class="status-panel">
+          <div class="status-header">
+            <span>node/production</span>
+            <span class="status-badge"><span class="dot"></span>OPERATIONAL</span>
+          </div>
+          <div class="uptime-label">Career Uptime — since Oct 2021</div>
+          <div class="uptime-value" id="uptimeValue"><span>—</span></div>
+
+          <div class="metric-grid">
+            <div class="metric"><div class="num">4+</div><div class="label">YRS IN PRODUCTION</div></div>
+            <div class="metric"><div class="num">140+</div><div class="label">APPS EC2 → EKS</div></div>
+            <div class="metric"><div class="num">160+</div><div class="label">SERVERS UPGRADED</div></div>
+            <div class="metric"><div class="num">$15K</div><div class="label">SAVED ANNUALLY</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="summary">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="section-title">Summary</h2>
+        <span class="section-index">01 / README</span>
+      </div>
+      <p class="summary-text">
+        Goal-oriented SRE and DevOps Engineer with <strong>4+ years of experience</strong> in CI/CD pipeline design, infrastructure automation, Kubernetes cluster management, and scalable cloud deployments on AWS. Led migration of <strong>140+ applications from EC2 to EKS</strong>, executed Tomcat upgrades across <strong>160+ servers</strong>, and drove a NetScaler-to-AWS ALB migration achieving <strong>~$15K in annual cost savings</strong>. Expert in Jenkins, GitLab CI, Terraform, Ansible, SaltStack, Docker, Helm, FluxCD, and DevSecOps tooling — with a proven 24×7 SRE operations background spanning incident management, Splunk observability, and SLA/SLO ownership.
+      </p>
+    </div>
+  </section>
+
+  <section id="pipeline">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="section-title">Deployment Pipeline</h2>
+        <span class="section-index">02 / EXPERIENCE</span>
+      </div>
+      <div class="job-meta">
+        Technology Analyst — SRE &amp; DevOps Engineer · <strong style="color:var(--text)">Infosys Limited</strong> · Oct 2021 – Present · Mangalore, Karnataka<br>
+        Client: <span class="client">Nu Skin Enterprises, Inc.</span> (Cosmetics E-Commerce)
+      </div>
+
+      <div class="pipeline" id="pipelineList">
+        <div class="stage">
+          <div class="stage-tag">Stage 01 · Build</div>
+          <div class="stage-title">CI/CD Pipeline Design</div>
+          <p class="stage-desc">Designed, built, and managed complex CI/CD pipelines in Jenkins — improving deployment efficiency by 40% and cutting release cycle times.</p>
+        </div>
+        <div class="stage">
+          <div class="stage-tag">Stage 02 · Provision</div>
+          <div class="stage-title">Infrastructure as Code</div>
+          <p class="stage-desc">Implemented Terraform for automated multi-environment AWS provisioning (EC2, EBS, VPC, EKS, S3, RDS, IAM, ALB, Secrets Manager, CloudWatch, Auto Scaling, Route53, CloudFront) and automated Fastly CDN configuration.</p>
+        </div>
+        <div class="stage">
+          <div class="stage-tag">Stage 03 · Migrate</div>
+          <div class="stage-title">EC2 → EKS, Zero Downtime</div>
+          <p class="stage-desc">Led end-to-end migration of 140+ applications from EC2 to EKS using GitOps, Helm, and FluxCD — with zero downtime and zero production incidents.</p>
+        </div>
+        <div class="stage">
+          <div class="stage-tag">Stage 04 · Automate</div>
+          <div class="stage-title">Config Management</div>
+          <p class="stage-desc">Automated provisioning and configuration workflows using Ansible (YAML) and SaltStack, cutting manual intervention by 60%.</p>
+        </div>
+        <div class="stage">
+          <div class="stage-tag">Stage 05 · Operate</div>
+          <div class="stage-title">24×7 SRE Operations</div>
+          <p class="stage-desc">Supported production systems around the clock; resolved high-severity incidents across Fastly CDN, Citrix NetScaler, Kubernetes, and Jenkins to meet SLAs/SLOs.</p>
+        </div>
+        <div class="stage">
+          <div class="stage-tag">Stage 06 · Optimize</div>
+          <div class="stage-title">Load Balancer Migration</div>
+          <p class="stage-desc">Led migration from Citrix NetScaler to AWS ALB with zero downtime, delivering ~$15K in annual cost savings.</p>
+        </div>
+        <div class="stage">
+          <div class="stage-tag">Stage 07 · Secure</div>
+          <div class="stage-title">Tomcat Upgrade &amp; CVE Remediation</div>
+          <p class="stage-desc">Executed a Tomcat upgrade from v9.0.88 to v9.0.105 across 160+ servers (Dev/Test/Prod), remediating critical CVEs and earning client recognition.</p>
+        </div>
+        <div class="stage">
+          <div class="stage-tag">Stage 08 · Modernize</div>
+          <div class="stage-title">Toolchain Migration</div>
+          <p class="stage-desc">Migrated the Nexus artifact repository from on-prem to cloud, and spearheaded a Jenkins-to-GitLab CI/CD migration with zero data loss. Also automated SSL certificate renewals in NetScaler via SaltStack, cutting manual effort by 70%, and improved observability with Splunk Cloud and SignalFx — reducing incident response time by 25%.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="stack">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="section-title">Infrastructure Stack</h2>
+        <span class="section-index">03 / SKILLS</span>
+      </div>
+      <div class="stack-grid">
+        <div class="layer">
+          <div class="layer-title">CI/CD &amp; Build</div>
+          <div class="chip-row">
+            <span class="chip">Jenkins</span><span class="chip">Maven</span><span class="chip">SonarQube</span><span class="chip">Nexus</span><span class="chip">GitLab CI</span>
+          </div>
+        </div>
+        <div class="layer">
+          <div class="layer-title">Containers &amp; Orchestration</div>
+          <div class="chip-row">
+            <span class="chip">Docker</span><span class="chip">Kubernetes (EKS)</span><span class="chip">Helm</span><span class="chip">FluxCD</span>
+          </div>
+        </div>
+        <div class="layer">
+          <div class="layer-title">Infrastructure as Code</div>
+          <div class="chip-row">
+            <span class="chip">Terraform</span><span class="chip">Ansible</span><span class="chip">SaltStack</span>
+          </div>
+        </div>
+        <div class="layer">
+          <div class="layer-title">Cloud Platform — AWS</div>
+          <div class="chip-row">
+            <span class="chip">EC2</span><span class="chip">EKS</span><span class="chip">S3</span><span class="chip">RDS</span><span class="chip">VPC</span><span class="chip">IAM</span><span class="chip">ALB</span><span class="chip">EBS</span><span class="chip">CloudWatch</span><span class="chip">Route53</span><span class="chip">CloudFront</span>
+          </div>
+        </div>
+        <div class="layer">
+          <div class="layer-title">CDN &amp; Load Balancing</div>
+          <div class="chip-row">
+            <span class="chip">Fastly CDN</span><span class="chip">Citrix NetScaler</span><span class="chip">AWS ALB</span>
+          </div>
+        </div>
+        <div class="layer">
+          <div class="layer-title">Monitoring &amp; Observability</div>
+          <div class="chip-row">
+            <span class="chip">Splunk Cloud</span><span class="chip">Splunk Observability</span><span class="chip">SignalFx</span>
+          </div>
+        </div>
+        <div class="layer">
+          <div class="layer-title">DevSecOps</div>
+          <div class="chip-row">
+            <span class="chip">Orca</span><span class="chip">TVM</span><span class="chip">Vulnerability Remediation</span>
+          </div>
+        </div>
+        <div class="layer">
+          <div class="layer-title">Scripting &amp; OS</div>
+          <div class="chip-row">
+            <span class="chip">Bash / Shell</span><span class="chip">YAML</span><span class="chip">Linux (Amazon Linux)</span>
+          </div>
+        </div>
+        <div class="layer">
+          <div class="layer-title">Version Control &amp; Collaboration</div>
+          <div class="chip-row">
+            <span class="chip">Git</span><span class="chip">GitHub</span><span class="chip">GitLab</span><span class="chip">Jira Cloud</span><span class="chip">Jira Service Mgmt</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="achievements">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="section-title">Achievements</h2>
+        <span class="section-index">04 / STATUS LOG</span>
+      </div>
+      <div class="badge-list">
+        <div class="badge"><span class="mark">✓</span><p><strong>MVP Award</strong> from client Nu Skin Enterprises for outstanding performance and delivery.</p></div>
+        <div class="badge"><span class="mark">✓</span><p><strong>Zero-incident EC2 → EKS migration</strong> across 140+ applications, modernizing the stack to cloud-native GitOps.</p></div>
+        <div class="badge"><span class="mark">✓</span><p><strong>~$15K/yr saved</strong> via zero-downtime NetScaler → AWS ALB migration.</p></div>
+        <div class="badge"><span class="mark">✓</span><p><strong>Zero-defect Tomcat upgrade</strong> across 160+ servers with formal client recognition.</p></div>
+        <div class="badge"><span class="mark">✓</span><p><strong>Zero-downtime, zero-data-loss</strong> Jenkins → GitLab CI/CD migration.</p></div>
+        <div class="badge"><span class="mark">✓</span><p><strong>60% less manual provisioning</strong> (Ansible/SaltStack) and <strong>70% less SSL cert effort</strong> via automation.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="education">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="section-title">Education &amp; Certifications</h2>
+        <span class="section-index">05 / CREDENTIALS</span>
+      </div>
+      <div class="split-grid">
+        <div>
+          <div class="subhead">Education</div>
+          <div class="edu-card">
+            <div class="school">St. Joseph Engineering College</div>
+            <div class="degree">Bachelor of Technology — Mechanical Engineering</div>
+            <div class="meta">Vamanjoor, Mangalore, Karnataka · 2017 – 2021 · CGPA 8.01</div>
+          </div>
+
+          <div class="subhead" style="margin-top:36px;">Languages</div>
+          <div class="lang-row">
+            <span class="chip">English</span><span class="chip">Kannada</span><span class="chip">Hindi</span><span class="chip">Tulu</span>
+          </div>
+        </div>
+        <div>
+          <div class="subhead">Certifications</div>
+          <ul class="cert-list">
+            <li><span class="idx">01</span><span><strong>Certified Associate in Infrastructure as Code using Terraform</strong> — Infosys</span></li>
+            <li><span class="idx">02</span><span><strong>AWS Cloud Practitioner Essentials</strong> — Infosys / AWS</span></li>
+            <li><span class="idx">03</span><span><strong>Certified Kubernetes Administrator (CKA)</strong> — Udemy</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contact">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="section-title">Contact</h2>
+        <span class="section-index">06 / CONNECT</span>
+      </div>
+      <div class="terminal">
+        <div class="line"><span class="prompt">$</span> whoami</div>
+        <div class="line">harish_p_rao — SRE &amp; DevOps Engineer</div>
+        <div class="line"><span class="prompt">$</span> cat contact.yaml</div>
+        <div class="line">email: <a href="mailto:raoharish199@gmail.com">raoharish199@gmail.com</a></div>
+        <div class="line">phone: <a href="tel:+918971334633">+91 8971334633</a></div>
+        <div class="line">linkedin: <a href="https://linkedin.com/in/harishrao-1512/" target="_blank" rel="noopener">linkedin.com/in/harishrao-1512</a></div>
+        <div class="line">location: Mangaluru, Karnataka, India 575014</div>
+        <div class="line"><span class="prompt">$</span> <span class="cursor"></span></div>
+      </div>
+      <div class="footer-note">© 2026 Harish P Rao · Built as a static site, deployable anywhere.</div>
+    </div>
+  </footer>
+</main>
+
+<script>
+  // Mobile nav toggle
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => {
+    const isOpen = navLinks.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', isOpen);
+  });
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    navLinks.classList.remove('open');
+    navToggle.setAttribute('aria-expanded', 'false');
+  }));
+
+  // Career uptime counter (since Oct 1 2021)
+  const start = new Date('2021-10-01T00:00:00');
+  const uptimeEl = document.getElementById('uptimeValue');
+  function renderUptime(){
+    const now = new Date();
+    let diffMs = now - start;
+    const msPerDay = 1000*60*60*24;
+    let days = Math.floor(diffMs / msPerDay);
+    const years = Math.floor(days / 365.25);
+    days = days - Math.floor(years * 365.25);
+    uptimeEl.innerHTML = '<span>' + years + 'y</span> ' + days + 'd';
+  }
+  renderUptime();
+  setInterval(renderUptime, 60000);
+
+  // Reveal pipeline stages on scroll
+  const stages = document.querySelectorAll('.stage');
+  if ('IntersectionObserver' in window){
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting){
+          entry.target.classList.add('in-view');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    stages.forEach(s => io.observe(s));
+  } else {
+    stages.forEach(s => s.classList.add('in-view'));
+  }
+</script>
+
+</body>
+</html>
